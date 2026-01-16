@@ -183,40 +183,55 @@
                 <h2 class="text-3xl font-bold text-slate-900 mt-2">共創のための3つの機能</h2>
             </div>
 
-            <!-- 1. Matching -->
-            <div id="matching" class="mb-24 fade-in-section">
+            <!-- 1. Crowdfunding -->
+            <div id="crowdfunding" class="fade-in-section">
                 <div class="flex justify-between items-end mb-8">
                     <h3 class="text-2xl font-bold text-slate-800 flex items-center">
                         <span class="bg-brand-cyan text-white rounded px-2 py-1 text-sm mr-3">01</span>
+                        クラウドファンディング
+                    </h3>
+                    <a href="#" class="text-brand-cyan text-sm hover:underline font-medium">プロジェクト一覧 →</a>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="cf-container">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- 2. Matching -->
+            <div id="matching" class="mb-24 fade-in-section">
+                <div class="flex justify-between items-end mb-8">
+                    <h3 class="text-2xl font-bold text-slate-800 flex items-center">
+                        <span class="bg-brand-cyan text-white rounded px-2 py-1 text-sm mr-3">02</span>
                         マッチング
                     </h3>
                     <a href="#" class="text-brand-cyan text-sm hover:underline font-medium">すべて見る →</a>
                 </div>
                 <div class="grid md:grid-cols-3 gap-6">
                     <!-- Matching Card 1 -->
-                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-cyan">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-xs font-bold bg-cyan-50 text-brand-cyan px-2 py-1 rounded">求む：技術提供</span>
-                            <span class="text-slate-400 text-sm">2日前</span>
-                        </div>
-                        <h4 class="font-bold text-lg mb-2">高齢者向け健康アプリのUI改善</h4>
-                        <p class="text-slate-600 text-sm mb-4">地元のシニアクラブと連携し、スマホ初心者でも使いやすい健康管理アプリを開発中です。UXデザイナーを募集。</p>
-                        <div class="flex items-center gap-2 mt-auto pt-4 border-t border-slate-100">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs">NPO</div>
-                            <span class="text-xs text-slate-500">荒尾ウェルネスの会</span>
-                        </div>
-                    </div>
-                    <!-- Matching Card 2 -->
                     <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-magenta">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-xs font-bold bg-fuchsia-50 text-brand-magenta px-2 py-1 rounded">求む：実証フィールド</span>
-                            <span class="text-slate-400 text-sm">5日前</span>
+                            <span class="text-slate-400 text-sm">2日前</span>
                         </div>
                         <h4 class="font-bold text-lg mb-2">小型自動配送ロボットの走行実験</h4>
                         <p class="text-slate-600 text-sm mb-4">歩道走行可能な配送ロボットのテストを行いたいです。比較的平坦で、人通りのある商店街エリアを探しています。</p>
                         <div class="flex items-center gap-2 mt-auto pt-4 border-t border-slate-100">
                             <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs">Ent</div>
                             <span class="text-xs text-slate-500">RoboDelivery Inc.</span>
+                        </div>
+                    </div>
+                    <!-- Matching Card 2 -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-cyan">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold bg-cyan-50 text-brand-cyan px-2 py-1 rounded">スペース求む</span>
+                            <span class="text-slate-400 text-sm">5日前</span>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">キッチンカー出店</h4>
+                        <p class="text-slate-600 text-sm mb-4">万田坑フェスタに合わせて駅前周辺にキッチンカーを出店できるスペースを募集。</p>
+                        <div class="flex items-center gap-2 mt-auto pt-4 border-t border-slate-100">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs">Ent.</div>
+                            <span class="text-xs text-slate-500">#駅前 #万田坑フェスタ #飲食</span>
                         </div>
                     </div>
                      <!-- Matching Card 3 -->
@@ -226,22 +241,22 @@
                             <span class="text-slate-400 text-sm">1週間前</span>
                         </div>
                         <h4 class="font-bold text-lg mb-2">荒尾梨のスマート農業データ分析</h4>
-                        <p class="text-slate-600 text-sm mb-4">土壌センサーと収穫量の相関データを共有できます。AI解析により収穫時期最適化を行いたい研究者の方。</p>
+                        <p class="text-slate-600 text-sm mb-4">AI解析を応用したスマート農業に興味のある大学生です。荒尾梨の収穫量最適化の共同研究をしていただける方。</p>
                         <div class="flex items-center gap-2 mt-auto pt-4 border-t border-slate-100">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs">Agr</div>
-                            <span class="text-xs text-slate-500">JA荒尾ファーマーズ</span>
+                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs">Stu</div>
+                            <span class="text-xs text-slate-500">#農業 #荒尾梨 #AI</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. Open Field -->
+            <!-- 3. Open Field -->
             <div id="field" class="mb-24 fade-in-section">
                 <div class="flex flex-col md:flex-row gap-12 items-center">
                     <div class="md:w-1/2">
                         <h3 class="text-2xl font-bold text-slate-800 flex items-center mb-6">
-                            <span class="bg-brand-cyan text-white rounded px-2 py-1 text-sm mr-3">02</span>
-                            実証フィールド提供
+                            <span class="bg-brand-cyan text-white rounded px-2 py-1 text-sm mr-3">03</span>
+                            提供可能フィールド検索
                         </h3>
                         <h4 class="text-xl font-bold mb-4">未活用の土地を、<br>イノベーションの実験場に。</h4>
                         <p class="text-slate-600 mb-6">
@@ -283,21 +298,6 @@
                             <span class="bg-white px-4 py-2 rounded shadow opacity-0 group-hover:opacity-100 transition transform translate-y-2 group-hover:translate-y-0">クリックして探索</span>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- 3. Crowdfunding -->
-            <div id="crowdfunding" class="fade-in-section">
-                <div class="flex justify-between items-end mb-8">
-                    <h3 class="text-2xl font-bold text-slate-800 flex items-center">
-                        <span class="bg-brand-cyan text-white rounded px-2 py-1 text-sm mr-3">03</span>
-                        クラウドファンディング
-                    </h3>
-                    <a href="#" class="text-brand-cyan text-sm hover:underline font-medium">プロジェクト一覧 →</a>
-                </div>
-                
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="cf-container">
-                    <!-- Rendered by JS -->
                 </div>
             </div>
         </div>
@@ -617,4 +617,5 @@
 
     </script>
 </body>
+
 </html>
