@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARAO FUTURE CO-LAB | 応援ページ</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-cyan': '#06b6d4', /* シアン（メインカラー） */
+            'brand-peach': '#FFC099',
+            'brand-green': '#2ED573',
+            'brand-light': '#f8fafc', /* 背景を少しすっきりとした色に微調整 */
+            'brand-dark': '#334155', /* テキスト色も少しブルーグレー寄りに */
+            'brand-gray': '#F1F2F6',
+          },
+          fontFamily: {
+            sans: ['"Nunito"', '"M PLUS Rounded 1c"', '"Hiragino Maru Gothic ProN"', '"Quicksand"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    #root {
+      padding-top: 80px;
+    }
+    body {
+      background-color: #f8fafc; /* brand-light に合わせる */
+      color: #334155; /* brand-dark に合わせる */
+      font-family: "Nunito", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Quicksand", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+  <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        /* ロゴの雰囲気に合わせた深い背景色 */
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+        }
+        /* Custom scrollbar for clean look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* default */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+        .object-contain {
+            border-radius: 50%;
+        }
+    </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@19.0.0",
+        "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+        "motion/react": "https://esm.sh/motion@12.23.24/react?deps=react@19.0.0",
+        "lucide-react": "https://esm.sh/lucide-react@0.546.0?deps=react@19.0.0"
+      }
+    }
+  </script>
+
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <nav class="fixed w-full z-50 glass-nav border-b border-slate-200 transition-all duration-300" id="navbar">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16 items-center">
+              <!-- Logo Section -->
+              <div class="flex items-center gap-3">
+                  <!-- ロゴ画像: 保存した画像ファイル名に合わせてください -->
+                  <img src="logo.jpg" alt="ARAO CO-LAB Logo" class="h-10 w-auto object-contain">
+                  <span class="font-bold text-xl tracking-tight text-slate-900">ARAO CO-LAB</span>
+              </div>
+              <div class="hidden md:flex space-x-8">
+                  <a href="#mission" class="text-slate-600 hover:text-brand-cyan transition font-medium">ミッション</a>
+                  <a href="#matching" class="text-slate-600 hover:text-brand-cyan transition font-medium">マッチング</a>
+                  <a href="#field" class="text-slate-600 hover:text-brand-cyan transition font-medium">実証フィールド</a>
+                  <a href="#crowdfunding" class="text-slate-600 hover:text-brand-cyan transition font-medium">支援する</a>
+              </div>
+              <button onclick="openModal('login')" class="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-brand-magenta transition shadow-lg duration-300">
+                  ログアウト
+              </button>
+          </div>
+      </div>
+  </nav>
+  <div id="root"></div>
+  <script type="text/babel" data-type="module" data-presets="react">
+    import React, { useState, useEffect } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { motion, AnimatePresence } from 'motion/react';
+    import { Heart, ShoppingBag, User, Coins, ChevronRight, Sparkles, Gift, ArrowUpRight, CheckCircle2, Flower2, Sprout, TreeDeciduous, MapPin, Home, Building2 } from 'lucide-react';
+
+    // --- Mock Data ---
+    const INITIAL_PROJECTS = [
+      {
+        id: 'p1',
+        title: '荒尾の空き家を改装して、学生と地域住民が集う温かいカフェを作りたい！',
+        dreamer: 'カフェ起業を夢見る大学生 ユウキ',
+        description: '荒尾市内の空き家を活用し、地元の食材を使ったメニューを提供するカフェをオープンします。利益の一部をAraoPayで還元します！',
+        goal: 500000,
+        current: 320000,
+        image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=800',
+        status: 'funding',
+        returnRate: 1.2,
+      },
+      {
+        id: 'p2',
+        title: '耕作放棄地を復活！絶品の「荒尾ジャンボ梨」を全国に届けたい',
+        dreamer: '若手農家 ケンタ',
+        description: '高齢化で手放された梨園を受け継ぎ、荒尾の特産品である梨を育てます。収穫後、売上からリターンをお返しします。',
+        goal: 300000,
+        current: 280000,
+        image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&q=80&w=800',
+        status: 'funding',
+        returnRate: 1.15,
+      },
+      {
+        id: 'p3',
+        title: '荒尾の海辺で、Z世代向けのアート＆音楽フェスを開催したい！',
+        dreamer: 'イベント企画サークル',
+        description: '地元のアーティストを集めたフェスを開催し、荒尾を盛り上げます！チケット代やグッズ売上から還元予定です。',
+        goal: 200000,
+        current: 50000,
+        image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=800',
+        status: 'funding',
+        returnRate: 1.1,
+      }
+    ];
+
+    const PRODUCTS = [
+      { id: 's1', name: '荒尾ジャンボ梨 (1箱)', basePrice: 3000, image: 'https://images.unsplash.com/photo-1514756331096-242fdeb70d4a?auto=format&fit=crop&q=80&w=800', description: 'みずみずしくて甘い、荒尾が誇る特大の梨です。', seller: '荒尾梨組合' },
+      { id: 's2', name: '荒尾みかん (詰め合わせ)', basePrice: 1500, image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?auto=format&fit=crop&q=80&w=800', description: '太陽の恵みをたっぷり浴びた、甘酸っぱいみかんです。', seller: 'みかん農園 佐藤' },
+      { id: 's3', name: '【夢実現！】ユウキのカフェ特製 手作りクッキー', basePrice: 800, image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&q=80&w=800', description: '皆さんの支援でオープンしたカフェで焼いた、感謝のクッキーです！', seller: 'Cafe ユウキ' },
+      { id: 's4', name: '荒尾産 ひのひかり (5kg)', basePrice: 2500, image: 'https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&q=80&w=800', description: 'ふっくらツヤツヤ、毎日食べたい美味しいお米です。', seller: '荒尾米穀店' },
+      { id: 's5', name: '有明海産 初摘み海苔', basePrice: 2000, image: 'https://images.unsplash.com/photo-1626804475297-41609ea0af49?auto=format&fit=crop&q=80&w=800', description: '香り豊かで口どけの良い、有明海産の高級海苔です。', seller: '荒尾海苔協同組合' },
+      { id: 's6', name: '小代焼（しょうだいやき）マグカップ', basePrice: 4500, image: 'https://images.unsplash.com/photo-1610705180743-162f474b341c?auto=format&fit=crop&q=80&w=800', description: '荒尾を代表する伝統的工芸品。素朴で温かみのある風合いが特徴です。', seller: '小代焼窯元' },
+      { id: 's7', name: '荒尾オリーブオイル (エキストラバージン)', basePrice: 3500, image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&q=80&w=800', description: '荒尾の太陽を浴びて育ったオリーブを手摘みで搾った最高級オイル。', seller: '荒尾オリーブファーム' },
+      { id: 's8', name: '荒尾産 アールスメロン (1玉)', basePrice: 4000, image: 'https://images.unsplash.com/photo-1598030304671-5aa1d6f21128?auto=format&fit=crop&q=80&w=800', description: 'とろけるような甘さと芳醇な香りが楽しめる高級メロンです。', seller: '荒尾メロン農園' }
+    ];
+
+    // --- Helper Functions ---
+    const getRank = (totalSupported) => {
+      if (totalSupported >= 10000) return '荒尾ご縁住民';
+      if (totalSupported >= 3000) return '荒尾の友';
+      return '荒尾推し';
+    };
+
+    const getDiscountRate = (rank) => {
+      switch (rank) {
+        case '荒尾ご縁住民': return 0.20;
+        case '荒尾の友': return 0.10;
+        case '荒尾推し': return 0;
+      }
+    };
+
+    const getRankColor = (rank) => {
+      switch (rank) {
+        case '荒尾ご縁住民': return 'bg-pink-100 text-pink-800 border border-pink-200';
+        case '荒尾の友': return 'bg-cyan-100 text-cyan-800 border border-cyan-200'; // cyan系に変更
+        case '荒尾推し': return 'bg-green-100 text-green-800 border border-green-200';
+      }
+    };
+
+    const CuteSakuraIllustration = ({ rank }) => {
+      if (rank === '荒尾推し') {
+        return (
+          <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)]">
+            <circle cx="100" cy="100" r="95" fill="#f0fdf4" />
+            <path d="M50 150 Q100 130 150 150 Q100 180 50 150" fill="#8B5A2B" />
+            <path d="M100 145 Q90 110 100 80" stroke="#4ade80" strokeWidth="10" strokeLinecap="round" fill="none" />
+            <path d="M100 95 Q50 50 30 90 Q60 120 100 95" fill="#4ade80" />
+            <path d="M100 90 Q150 40 170 80 Q140 110 100 90" fill="#22c55e" />
+            <circle cx="60" cy="85" r="4" fill="#166534" />
+            <circle cx="80" cy="80" r="4" fill="#166534" />
+            <path d="M65 90 Q70 95 75 90" stroke="#166534" strokeWidth="2" strokeLinecap="round" fill="none" />
+            <path d="M30 40 L35 30 L45 35 L35 40 Z" fill="#fbbf24" opacity="0.8" />
+            <circle cx="150" cy="40" r="6" fill="#fbbf24" opacity="0.6" />
+          </svg>
+        );
+      } else if (rank === '荒尾の友') {
+        return (
+          <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)]">
+            <circle cx="100" cy="100" r="95" fill="#ecfeff" /> {/* シアン系の背景に調整 */}
+            <path d="M40 160 Q100 140 160 160 Q100 185 40 160" fill="#8B5A2B" />
+            <path d="M100 155 L95 90 L60 60 M95 90 L135 55 M95 90 L110 70 L145 65" stroke="#8B5A2B" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <circle cx="60" cy="60" r="18" fill="#f9a8d4" />
+            <circle cx="135" cy="55" r="20" fill="#f472b6" />
+            <circle cx="145" cy="65" r="14" fill="#fbcfe8" />
+            <circle cx="110" cy="70" r="18" fill="#fb7185" />
+            <circle cx="130" cy="52" r="3" fill="#831843" />
+            <circle cx="142" cy="52" r="3" fill="#831843" />
+            <path d="M133 58 Q136 62 139 58" stroke="#831843" strokeWidth="2" strokeLinecap="round" fill="none" />
+            <path d="M95 120 Q60 100 65 130 Q85 125 95 120" fill="#4ade80" />
+            <path d="M100 130 Q135 110 130 140 Q110 135 100 130" fill="#22c55e" />
+            <path d="M150 30 L154 20 L164 24 L154 28 Z" fill="#fbbf24" opacity="0.8" />
+          </svg>
+        );
+      } else {
+        return (
+          <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)]">
+            <circle cx="100" cy="100" r="95" fill="#fdf2f8" />
+            <path d="M30 165 Q100 145 170 165 Q100 190 30 165" fill="#8B5A2B" />
+            <path d="M100 160 L95 90 L50 50 M95 90 L145 45 M95 90 L120 70 L160 65" stroke="#8B5A2B" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <circle cx="100" cy="60" r="50" fill="#fbcfe8" />
+            <circle cx="60" cy="85" r="45" fill="#f9a8d4" />
+            <circle cx="140" cy="80" r="45" fill="#f9a8d4" />
+            <circle cx="75" cy="40" r="40" fill="#f472b6" />
+            <circle cx="125" cy="40" r="40" fill="#f472b6" />
+            <circle cx="100" cy="95" r="40" fill="#fbcfe8" />
+            <circle cx="90" cy="65" r="5" fill="#831843" />
+            <circle cx="110" cy="65" r="5" fill="#831843" />
+            <path d="M95 72 Q100 78 105 72" stroke="#831843" strokeWidth="3" strokeLinecap="round" fill="none" />
+            <circle cx="82" cy="70" r="6" fill="#f43f5e" opacity="0.4" />
+            <circle cx="118" cy="70" r="6" fill="#f43f5e" opacity="0.4" />
+            <path d="M40 120 Q45 125 40 130 Q35 125 40 120" fill="#f9a8d4" />
+            <path d="M160 110 Q165 115 160 120 Q155 115 160 110" fill="#f472b6" />
+            <path d="M120 150 Q125 155 120 160 Q115 155 120 150" fill="#fbcfe8" />
+            <path d="M70 140 Q75 145 70 150 Q65 145 70 140" fill="#f9a8d4" />
+            <path d="M25 50 L30 38 L42 43 L30 48 Z" fill="#fbbf24" opacity="0.9" />
+            <path d="M175 50 L179 40 L189 44 L179 48 Z" fill="#fbbf24" opacity="0.9" />
+          </svg>
+        );
+      }
+    };
+
+    function App() {
+      // --- State ---
+      const [activeTab, setActiveTab] = useState('projects');
+      const [balance, setBalance] = useState(5000);
+      const [totalSupported, setTotalSupported] = useState(0);
+      const [supportHistory, setSupportHistory] = useState([]);
+      const [projects, setProjects] = useState(INITIAL_PROJECTS);
+      const [landOffers, setLandOffers] = useState([]);
+      const [selectedProject, setSelectedProject] = useState(null);
+      const [supportType, setSupportType] = useState('ap');
+      const [selectedLandId, setSelectedLandId] = useState('');
+      const [supportAmount, setSupportAmount] = useState('1000');
+      const [showToast, setShowToast] = useState(null);
+
+      const [landForm, setLandForm] = useState({
+        ownerName: '', location: '', size: '', type: 'rent', description: '', contact: ''
+      });
+
+      const currentRank = getRank(totalSupported);
+      const discountRate = getDiscountRate(currentRank);
+
+      // --- Actions ---
+      const triggerToast = (message, type = 'success') => {
+        setShowToast({ message, type });
+        setTimeout(() => setShowToast(null), 3000);
+      };
+
+      const handleCharge = (amount) => {
+        setBalance(prev => prev + amount);
+        triggerToast(`${amount} AraoPay をチャージしました！`);
+      };
+
+      const handleSupport = () => {
+        if (supportType === 'ap') {
+          const amount = parseInt(supportAmount);
+          if (isNaN(amount) || amount <= 0) { triggerToast('正しい金額を入力してください', 'info'); return; }
+          if (amount > balance) { triggerToast('AraoPayの残高が不足しています', 'info'); return; }
+
+          setBalance(prev => prev - amount);
+          setTotalSupported(prev => prev + amount);
+          
+          if (selectedProject) {
+            setProjects(prev => prev.map(p => p.id === selectedProject.id ? { ...p, current: p.current + amount } : p));
+            setSupportHistory(prev => [{ projectId: selectedProject.id, amount: amount, date: new Date().toLocaleDateString('ja-JP'), isRealized: false, type: 'ap' }, ...prev]);
+          }
+          triggerToast(`応援ありがとうございます！ ${amount} AraoPayを支援しました。`);
+        } else {
+          if (!selectedLandId) { triggerToast('提供する土地を選択してください', 'info'); return; }
+          const land = landOffers.find(l => l.id === selectedLandId);
+          const project = selectedProject;
+          if (!land || !project) return;
+
+          triggerToast(`土地オファーを送信しました！夢の実現に向けてマッチングを開始します。`);
+
+          setTimeout(() => {
+            triggerToast(`🎉 オファーが承諾されました！ ${land.location} が夢の舞台として活用されます。`, 'success');
+            setSupportHistory(prev => [{ projectId: project.id, amount: 5000, date: new Date().toLocaleDateString('ja-JP'), isRealized: false, type: 'land' }, ...prev]);
+            setTotalSupported(prev => {
+              if (prev < 3000) return 3000;
+              if (prev < 10000) return 10000;
+              return prev + 5000;
+            });
+          }, 3000);
+        }
+
+        setSelectedProject(null);
+        setSupportType('ap');
+        setSelectedLandId('');
+        setSupportAmount('1000');
+      };
+
+      const handleBuy = (product) => {
+        const finalPrice = Math.floor(product.basePrice * (1 - discountRate));
+        if (finalPrice > balance) { triggerToast('AraoPayの残高が不足しています', 'info'); return; }
+        setBalance(prev => prev - finalPrice);
+        triggerToast(`${product.name} を購入しました！到着をお楽しみに。`);
+      };
+
+      const handleLandSubmit = (e) => {
+        e.preventDefault();
+        if (!landForm.ownerName || !landForm.location || !landForm.description) { triggerToast('必須項目を入力してください', 'info'); return; }
+        const newOffer = { id: Date.now().toString(), ...landForm };
+        setLandOffers(prev => [newOffer, ...prev]);
+        setLandForm({ ownerName: '', location: '', size: '', type: 'rent', description: '', contact: '' });
+        triggerToast('土地の登録が完了しました！夢の実現に貢献します。');
+      };
+
+      const simulateDreamRealized = (historyItem) => {
+        const project = projects.find(p => p.id === historyItem.projectId);
+        if (!project) return;
+        const returnAmount = Math.floor(historyItem.amount * project.returnRate);
+        setBalance(prev => prev + returnAmount);
+        setSupportHistory(prev => prev.map(h => h.projectId === historyItem.projectId ? { ...h, isRealized: true } : h));
+        setProjects(prev => prev.map(p => p.id === project.id ? { ...p, status: 'realized' } : p));
+        if (historyItem.type === 'land') { triggerToast(`🎉 夢が実現しました！ 土地提供への感謝として ${returnAmount} AraoPay が還元されました！`); } 
+        else { triggerToast(`🎉 夢が実現しました！ 投資リターンとして ${returnAmount} AraoPay が還元されました！`); }
+      };
+
+      // --- Renderers ---
+      const renderProjects = () => (
+        <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-brand-dark mb-2">荒尾の夢を応援しよう</h1>
+            <p className="text-sm text-gray-500">あなたの支援が、誰かの夢と荒尾の未来を作ります。</p>
+          </div>
+          {projects.map(project => (
+            <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-brand-gray">
+              <div className="relative h-48">
+                <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+                {project.status === 'realized' && (
+                  <div className="absolute top-4 right-4 bg-brand-green text-white px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1 shadow-md">
+                    <Sparkles size={16} /> 夢実現！
+                  </div>
+                )}
+              </div>
+              <div className="p-5">
+                <div className="text-xs font-bold text-brand-cyan mb-2">{project.dreamer}</div>
+                <h3 className="font-bold text-lg leading-tight mb-3">{project.title}</h3>
+                <p className="text-sm text-gray-600 mb-4 line-clamp-2">{project.description}</p>
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm mb-1"><span className="font-bold text-brand-dark">{project.current.toLocaleString()} AP</span><span className="text-gray-400">目標: {project.goal.toLocaleString()} AP</span></div>
+                  <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                    <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(100, (project.current / project.goal) * 100)}%` }} className="bg-brand-cyan h-2.5 rounded-full" />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between bg-cyan-50 p-3 rounded-2xl mb-4">
+                  <span className="text-xs text-cyan-800 font-medium">夢実現時の想定リターン</span>
+                  <span className="text-sm font-bold text-brand-cyan flex items-center gap-1"><ArrowUpRight size={16} /> {project.returnRate * 100}%</span>
+                </div>
+                <button onClick={() => setSelectedProject(project)} disabled={project.status === 'realized'} className={`w-full py-3 rounded-2xl font-bold transition-colors flex justify-center items-center gap-2 ${project.status === 'realized' ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-brand-cyan text-white hover:bg-cyan-500 shadow-md shadow-cyan-200'}`}>
+                  <Heart size={18} /> {project.status === 'realized' ? '応援受付終了' : 'この夢を応援する'}
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      );
+
+      const renderShop = () => (
+        <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
+          <div className="mb-6"><h1 className="text-2xl font-bold text-brand-dark mb-2">荒尾マルシェ</h1><p className="text-sm text-gray-500">応援で貯まったランクでお得にお買い物！</p></div>
+          <div className="bg-white p-4 rounded-3xl shadow-sm border border-brand-gray flex items-center justify-between mb-6">
+            <div><div className="text-xs text-gray-500 mb-1">現在の会員ランク</div><div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-bold ${getRankColor(currentRank)}`}>{currentRank === '荒尾ご縁住民' && <Flower2 size={14} />}{currentRank}</div></div>
+            <div className="text-right"><div className="text-xs text-gray-500 mb-1">あなたのお買い物割引</div><div className="text-xl font-bold text-brand-green">{discountRate * 100}% OFF</div></div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {PRODUCTS.map(product => {
+              const finalPrice = Math.floor(product.basePrice * (1 - discountRate));
+              return (
+                <motion.div key={product.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-brand-gray flex flex-col">
+                  <div className="aspect-square relative"><img src={product.image} alt={product.name} className="w-full h-full object-cover" />{discountRate > 0 && (<div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">{discountRate * 100}%引</div>)}</div>
+                  <div className="p-3 flex flex-col flex-grow">
+                    <div className="text-[10px] text-gray-500 mb-1">{product.seller}</div>
+                    <h3 className="font-bold text-sm leading-tight mb-2 flex-grow">{product.name}</h3>
+                    <div className="mb-3"><div className="font-bold text-brand-dark text-lg">{finalPrice} <span className="text-xs font-normal">AP</span></div>
+                      <div className="mt-2 pt-2 border-t border-gray-100 space-y-1">
+                        <div className="text-[10px] text-gray-500 font-bold mb-1">ランク別価格</div>
+                        <div className={`flex justify-between text-[10px] ${currentRank === '荒尾推し' ? 'font-bold text-brand-cyan bg-cyan-50 px-1 rounded' : 'text-gray-400'}`}><span>荒尾推し</span><span>{product.basePrice} AP</span></div>
+                        <div className={`flex justify-between text-[10px] ${currentRank === '荒尾の友' ? 'font-bold text-brand-cyan bg-cyan-50 px-1 rounded' : 'text-gray-400'}`}><span>荒尾の友 (10%引)</span><span>{Math.floor(product.basePrice * 0.9)} AP</span></div>
+                        <div className={`flex justify-between text-[10px] ${currentRank === '荒尾ご縁住民' ? 'font-bold text-brand-cyan bg-cyan-50 px-1 rounded' : 'text-gray-400'}`}><span>ご縁住民 (20%引)</span><span>{Math.floor(product.basePrice * 0.8)} AP</span></div>
+                      </div>
+                    </div>
+                    <button onClick={() => handleBuy(product)} className="w-full bg-brand-dark text-white py-2 rounded-xl text-sm font-bold hover:bg-gray-800 transition-colors">購入する</button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      );
+
+      const renderLandRegistration = () => (
+        <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
+          <div className="mb-6"><h1 className="text-2xl font-bold text-brand-dark mb-2">土地で夢を応援する</h1><p className="text-sm text-gray-500">荒尾市内の土地や建物を、夢の実現のために提供しませんか？</p></div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-[2rem] p-6 shadow-sm border border-brand-gray">
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Building2 size={20} className="text-brand-cyan" /> 土地・建物情報の登録</h3>
+            <form onSubmit={handleLandSubmit} className="space-y-4">
+              <div><label className="block text-xs font-bold text-gray-500 mb-1">お名前 (必須)</label><input type="text" value={landForm.ownerName} onChange={e => setLandForm({...landForm, ownerName: e.target.value})} placeholder="例：荒尾 太郎" className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan" /></div>
+              <div><label className="block text-xs font-bold text-gray-500 mb-1">場所 (必須)</label><input type="text" value={landForm.location} onChange={e => setLandForm({...landForm, location: e.target.value})} placeholder="例：荒尾市大正町 1-2-3" className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan" /></div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><label className="block text-xs font-bold text-gray-500 mb-1">広さ (目安)</label><input type="text" value={landForm.size} onChange={e => setLandForm({...landForm, size: e.target.value})} placeholder="例：50平米" className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan" /></div>
+                <div><label className="block text-xs font-bold text-gray-500 mb-1">提供形態</label><select value={landForm.type} onChange={e => setLandForm({...landForm, type: e.target.value})} className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan"><option value="rent">賃貸</option><option value="sale">売却</option><option value="free">無償提供</option></select></div>
+              </div>
+              <div><label className="block text-xs font-bold text-gray-500 mb-1">詳細・夢への想い (必須)</label><textarea value={landForm.description} onChange={e => setLandForm({...landForm, description: e.target.value})} placeholder="例：日当たりの良い空き地です。若者のチャレンジを応援したいです。" rows={3} className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan resize-none" /></div>
+              <div><label className="block text-xs font-bold text-gray-500 mb-1">連絡先 (非公開)</label><input type="text" value={landForm.contact} onChange={e => setLandForm({...landForm, contact: e.target.value})} placeholder="電話番号やメールアドレス" className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan" /></div>
+              <button type="submit" className="w-full bg-brand-cyan text-white py-3 rounded-2xl font-bold hover:bg-cyan-500 transition-colors shadow-md shadow-cyan-200 flex items-center justify-center gap-2"><Home size={18} />土地・建物を登録する</button>
+            </form>
+          </motion.div>
+          <div>
+            <h3 className="font-bold text-brand-dark mb-4 px-1">登録済みの土地・建物</h3>
+            {landOffers.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-[2rem] border border-dashed border-gray-300"><MapPin size={40} className="mx-auto text-gray-200 mb-3" /><p className="text-sm text-gray-400">まだ登録された土地はありません</p></div>
+            ) : (
+              <div className="space-y-4">
+                {landOffers.map(offer => (
+                  <motion.div key={offer.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="bg-white p-5 rounded-3xl shadow-sm border border-brand-gray">
+                    <div className="flex justify-between items-start mb-3"><div className={`px-3 py-1 rounded-full text-[10px] font-bold ${offer.type === 'rent' ? 'bg-blue-100 text-blue-700' : offer.type === 'sale' ? 'bg-purple-100 text-purple-700' : 'bg-pink-100 text-pink-700'}`}>{offer.type === 'rent' ? '賃貸希望' : offer.type === 'sale' ? '売却希望' : '無償提供'}</div><span className="text-xs text-gray-400 font-medium">{offer.size}</span></div>
+                    <h4 className="font-bold text-brand-dark mb-2 flex items-center gap-1"><MapPin size={14} className="text-brand-cyan" /> {offer.location}</h4>
+                    <p className="text-sm text-gray-600 mb-3 leading-relaxed">{offer.description}</p>
+                    <div className="text-[10px] text-gray-400 font-bold">所有者: {offer.ownerName}</div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+
+      const renderMyPage = () => (
+        <div className="pb-24 pt-6 px-4 max-w-md mx-auto space-y-6">
+          <h1 className="text-2xl font-bold text-brand-dark mb-6">マイページ</h1>
+          <div className="bg-gradient-to-b from-slate-800 to-slate-950 p-6 rounded-[2rem] shadow-2xl border border-slate-700 relative overflow-hidden text-center">
+            <div className="absolute inset-0 opacity-40 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/40 via-slate-900 to-transparent -z-10" />
+            <h3 className="font-bold text-cyan-200 flex items-center justify-center gap-2 mb-8 text-lg tracking-widest"><Sparkles size={18} className="text-cyan-400" /> わたしの応援桜</h3>
+            <div className="relative w-48 h-48 mx-auto mb-10 flex items-center justify-center">
+              <div className={`absolute inset-0 rounded-full blur-3xl opacity-50 transition-all duration-1000 ${currentRank === '荒尾ご縁住民' ? 'bg-pink-500' : currentRank === '荒尾の友' ? 'bg-cyan-400' : 'bg-green-500'}`} />
+              <motion.div key={currentRank} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1, y: [0, -10, 0] }} transition={{ scale: { type: "spring", bounce: 0.5 }, opacity: { duration: 0.8 }, y: { repeat: Infinity, duration: 5, ease: "easeInOut" } }} className="relative z-10 w-40 h-40">
+                <CuteSakuraIllustration rank={currentRank} />
+              </motion.div>
+            </div>
+            <div className="mb-6 relative z-10">
+              <div className={`inline-flex items-center gap-1 px-5 py-2 rounded-full text-sm font-bold shadow-lg border border-white/10 backdrop-blur-md ${currentRank === '荒尾ご縁住民' ? 'bg-pink-500/20 text-pink-100' : currentRank === '荒尾の友' ? 'bg-cyan-500/20 text-cyan-100' : 'bg-green-500/20 text-green-100'}`}>{currentRank}</div>
+              <div className="text-sm font-medium text-cyan-50/90 mt-4 tracking-wide">{currentRank === '荒尾ご縁住民' ? '満開の桜が咲きました！🌸' : currentRank === '荒尾の友' ? '桜の蕾が膨らんできました🌳' : '応援の双葉が芽吹きました🌱'}</div>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-inner border border-white/5 relative z-10">
+              <div className="flex justify-between text-xs mb-3"><span className="text-cyan-100/80 font-medium">累計応援額</span><span className="font-bold text-white tracking-wider">{totalSupported.toLocaleString()} AP</span></div>
+              <div className="w-full bg-black/40 rounded-full h-3 mb-3 overflow-hidden relative shadow-inner">
+                <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(100, (totalSupported / 10000) * 100)}%` }} className="bg-gradient-to-r from-cyan-500 via-cyan-300 to-white h-full rounded-full relative shadow-[0_0_10px_rgba(6,182,212,0.8)]"><div className="absolute top-0 left-0 w-full h-full bg-white/30" style={{ backgroundImage: 'linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent)' }} /></motion.div>
+              </div>
+              {currentRank !== '荒尾ご縁住民' && (<div className="text-center text-[11px] text-cyan-100/70 font-light tracking-wider">次の「{currentRank === '荒尾推し' ? '荒尾の友' : '荒尾ご縁住民'}」まで あと <span className="font-bold text-white">{(currentRank === '荒尾推し' ? 3000 - totalSupported : 10000 - totalSupported).toLocaleString()} AP</span></div>)}
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-brand-cyan to-cyan-400 p-6 rounded-3xl text-white shadow-lg shadow-cyan-200">
+            <div className="flex justify-between items-start mb-6"><div><div className="text-cyan-50 text-sm mb-1">AraoPay 残高</div><div className="text-3xl font-bold flex items-baseline gap-1">{balance.toLocaleString()} <span className="text-lg font-normal">AP</span></div></div><div className="bg-white/20 p-2 rounded-2xl backdrop-blur-sm"><Coins size={24} className="text-white" /></div></div>
+            <div className="flex gap-2"><button onClick={() => handleCharge(1000)} className="flex-1 bg-white/20 hover:bg-white/30 transition-colors py-2 rounded-xl text-sm font-bold backdrop-blur-sm">+1,000 AP</button><button onClick={() => handleCharge(5000)} className="flex-1 bg-white/20 hover:bg-white/30 transition-colors py-2 rounded-xl text-sm font-bold backdrop-blur-sm">+5,000 AP</button></div>
+          </div>
+          <div>
+            <h3 className="font-bold text-brand-dark mb-4 px-1">応援履歴</h3>
+            {supportHistory.length === 0 ? (<div className="text-center py-8 text-gray-400 text-sm bg-white rounded-3xl border border-brand-gray">まだ応援履歴がありません</div>) : (
+              <div className="space-y-3">
+                {supportHistory.map((history, idx) => {
+                  const project = projects.find(p => p.id === history.projectId);
+                  if (!project) return null;
+                  return (
+                    <div key={idx} className="bg-white p-4 rounded-3xl shadow-sm border border-brand-gray">
+                      <div className="flex justify-between text-xs text-gray-500 mb-2"><span>{history.date}</span><span className="font-bold text-brand-cyan">{history.type === 'land' ? '土地提供オファー' : `${history.amount.toLocaleString()} AP 支援`}</span></div>
+                      <h4 className="font-bold text-sm mb-3 line-clamp-1">{project.title}</h4>
+                      {!history.isRealized ? (
+                        <div className="bg-cyan-50 rounded-xl p-3 border border-cyan-100">
+                          <p className="text-xs text-cyan-800 mb-2">💡 デモ機能：この夢が実現したと仮定して、リターンを受け取ってみましょう！</p>
+                          <button onClick={() => simulateDreamRealized(history)} className="w-full bg-white border border-brand-cyan text-brand-cyan py-2 rounded-lg text-xs font-bold hover:bg-cyan-50 transition-colors flex items-center justify-center gap-1"><Sparkles size={14} /> 夢実現シミュレーションを実行</button>
+                        </div>
+                      ) : (<div className="flex items-center gap-2 text-brand-green text-sm font-bold bg-green-50 p-2 rounded-xl"><CheckCircle2 size={16} />夢実現！リターン受取済み</div>)}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+
+      return (
+        <div className="min-h-screen bg-brand-light font-sans selection:bg-brand-cyan selection:text-white">
+          <main><AnimatePresence mode="wait"><motion.div key={activeTab} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.2 }}>{activeTab === 'projects' && renderProjects()}{activeTab === 'land' && renderLandRegistration()}{activeTab === 'shop' && renderShop()}{activeTab === 'mypage' && renderMyPage()}</motion.div></AnimatePresence></main>
+          
+          <AnimatePresence>
+            {selectedProject && (
+              <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 sm:p-0">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedProject(null)} className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+                <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 100 }} className="relative bg-white w-full max-w-md rounded-[2rem] p-6 shadow-2xl">
+                  <h3 className="font-bold text-lg mb-2">応援方法を選択</h3><p className="text-sm text-gray-500 mb-6 line-clamp-1">{selectedProject.title}</p>
+                  <div className="flex bg-gray-100 p-1 rounded-2xl mb-6"><button onClick={() => setSupportType('ap')} className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${supportType === 'ap' ? 'bg-white text-brand-cyan shadow-sm' : 'text-gray-400'}`}>AP支援</button><button onClick={() => setSupportType('land')} className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${supportType === 'land' ? 'bg-white text-brand-cyan shadow-sm' : 'text-gray-400'}`}>土地提供</button></div>
+                  {supportType === 'ap' ? (
+                    <div className="mb-6">
+                      <label className="block text-xs font-bold text-gray-500 mb-2">金額 (AraoPay)</label>
+                      <div className="relative"><input type="number" value={supportAmount} onChange={(e) => setSupportAmount(e.target.value)} className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-4 px-4 text-xl font-bold focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:border-transparent" /><span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">AP</span></div>
+                      <div className="flex justify-between mt-2 text-xs"><span className="text-gray-500">現在の残高: {balance.toLocaleString()} AP</span><span className="text-brand-cyan font-bold">想定リターン: {Math.floor(parseInt(supportAmount || '0') * selectedProject.returnRate).toLocaleString()} AP</span></div>
+                    </div>
+                  ) : (
+                    <div className="mb-6">
+                      <label className="block text-xs font-bold text-gray-500 mb-2">提供する土地を選択</label>
+                      {landOffers.length === 0 ? (
+                        <div className="bg-cyan-50 p-4 rounded-2xl border border-cyan-100 text-center"><p className="text-xs text-cyan-800 mb-3">まだ土地が登録されていません</p><button onClick={() => { setSelectedProject(null); setActiveTab('land'); }} className="text-xs font-bold text-brand-cyan underline">土地登録タブへ移動する</button></div>
+                      ) : (
+                        <div className="space-y-2 max-h-48 overflow-y-auto pr-1 hide-scrollbar">
+                          {landOffers.map(land => (
+                            <button key={land.id} onClick={() => setSelectedLandId(land.id)} className={`w-full text-left p-3 rounded-xl border transition-all ${selectedLandId === land.id ? 'border-brand-cyan bg-cyan-50' : 'border-gray-100 bg-gray-50'}`}><div className="text-xs font-bold text-brand-dark">{land.location}</div><div className="text-[10px] text-gray-500">{land.size} / {land.type === 'rent' ? '賃貸' : land.type === 'sale' ? '売却' : '無償'}</div></button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <div className="flex gap-3">
+                    <button onClick={() => { setSelectedProject(null); setSupportType('ap'); setSelectedLandId(''); }} className="flex-1 py-3 rounded-2xl font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 transition-colors">キャンセル</button>
+                    <button onClick={handleSupport} className="flex-[2] py-3 rounded-2xl font-bold text-white bg-brand-cyan hover:bg-cyan-500 transition-colors shadow-md shadow-cyan-200">{supportType === 'ap' ? '応援を確定する' : 'オファーを送信する'}</button>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {showToast && (
+              <motion.div initial={{ opacity: 0, y: 50, x: "-50%", scale: 0.9 }} animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }} exit={{ opacity: 0, y: 20, x: "-50%", scale: 0.9 }} className="fixed top-6 left-1/2 z-50 w-[90%] max-w-sm">
+                <div className={`rounded-2xl p-4 shadow-lg flex items-center gap-3 font-bold text-sm ${showToast.type === 'success' ? 'bg-brand-dark text-white' : 'bg-white text-brand-dark border border-gray-200'}`}>{showToast.type === 'success' ? <Gift size={20} className="text-brand-cyan" /> : <Sparkles size={20} className="text-brand-cyan" />}{showToast.message}</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 pb-safe z-40">
+            <div className="max-w-md mx-auto flex justify-around items-center h-16 px-2">
+              <button onClick={() => setActiveTab('projects')} className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === 'projects' ? 'text-brand-cyan' : 'text-gray-400 hover:text-gray-600'}`}><Heart size={24} strokeWidth={activeTab === 'projects' ? 2.5 : 2} /><span className="text-[10px] font-bold">応援する</span></button>
+              <button onClick={() => setActiveTab('land')} className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === 'land' ? 'text-brand-cyan' : 'text-gray-400 hover:text-gray-600'}`}><MapPin size={24} strokeWidth={activeTab === 'land' ? 2.5 : 2} /><span className="text-[10px] font-bold">土地登録</span></button>
+              <button onClick={() => setActiveTab('shop')} className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === 'shop' ? 'text-brand-cyan' : 'text-gray-400 hover:text-gray-600'}`}><ShoppingBag size={24} strokeWidth={activeTab === 'shop' ? 2.5 : 2} /><span className="text-[10px] font-bold">マルシェ</span></button>
+              <button onClick={() => setActiveTab('mypage')} className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === 'mypage' ? 'text-brand-cyan' : 'text-gray-400 hover:text-gray-600'}`}><User size={24} strokeWidth={activeTab === 'mypage' ? 2.5 : 2} /><span className="text-[10px] font-bold">マイページ</span></button>
+            </div>
+          </nav>
+        </div>
+      );
+    }
+
+    // Reactアプリのマウント
+    const root = createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
