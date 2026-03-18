@@ -461,12 +461,10 @@
     </div>
     <script>
         document.addEventListener('load', () => {
-            const supportLink = document.createElement('a');
-            supportLink.href = 'support.html';
             const links = document.getElementsByClassName('support-link');
             for (let link of links) {
                 link.addEventListener('click', () => {
-                    supportLink.click();
+                    location.href = 'https://li3n-189.github.io/araoCoLab/support.html';
                 });
             }
         });
