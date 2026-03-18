@@ -201,7 +201,7 @@
                     <button class="px-8 py-4 bg-brand-cyan text-white rounded-lg font-bold transition shadow-lg shadow-brand-cyan/30 flex items-center justify-center gap-2">
                         掲載する(ログイン)
                     </button>
-                    <button class="px-8 py-4 bg-brand-magenta text-white rounded-lg font-bold transition shadow-lg shadow-brand-magenta/30 flex items-center justify-center gap-2">
+                    <button class="support-link px-8 py-4 bg-brand-magenta text-white rounded-lg font-bold transition shadow-lg shadow-brand-magenta/30 flex items-center justify-center gap-2">
                         支援する(ログイン)
                     </button>
                 </div>
@@ -299,7 +299,7 @@
                     <button class="px-8 py-4 bg-brand-cyan text-white rounded-lg font-bold transition shadow-lg shadow-brand-cyan/30 flex items-center justify-center gap-2">
                         掲載する(ログイン)
                     </button>
-                    <button class="px-8 py-4 bg-brand-magenta text-white rounded-lg font-bold transition shadow-lg shadow-brand-magenta/30 flex items-center justify-center gap-2">
+                    <button class="support-link px-8 py-4 bg-brand-magenta text-white rounded-lg font-bold transition shadow-lg shadow-brand-magenta/30 flex items-center justify-center gap-2">
                         支援する(ログイン)
                     </button>
                 </div>
@@ -353,7 +353,7 @@
                     <button class="px-8 py-4 bg-brand-cyan text-white rounded-lg font-bold transition shadow-lg shadow-brand-cyan/30 flex items-center justify-center gap-2">
                         土地を依頼(ログイン)
                     </button>
-                    <button class="px-8 py-4 bg-brand-magenta text-white rounded-lg font-bold transition shadow-lg shadow-brand-magenta/30 flex items-center justify-center gap-2">
+                    <button class="support-link px-8 py-4 bg-brand-magenta text-white rounded-lg font-bold transition shadow-lg shadow-brand-magenta/30 flex items-center justify-center gap-2">
                         土地を提供(ログイン)
                     </button>
                 </div>
@@ -459,7 +459,18 @@
             <span>機能は準備中です</span>
         </div>
     </div>
-
+    <script>
+        document.addEventListener('load', () => {
+            const supportLink = document.createElement('a');
+            supportLink.href = 'support.html';
+            const links = document.getElementsByClassName('support-link');
+            for (let link of links) {
+                link.addEventListener('click', () => {
+                    supportLink.click();
+                });
+            }
+        });
+    </script>
     <script>
         // --- Canvas Animation (Network Effect) ---
         const canvas = document.getElementById('networkCanvas');
